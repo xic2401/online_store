@@ -1,7 +1,5 @@
 from django.db import models
-from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 # manager for our custom model
 from utils.uploads import upload_instance
@@ -12,25 +10,19 @@ class UserManager(BaseUserManager):
         This is a manager for Account class
     """
 
-    def create_user(self, email, username, password=None):
+    def create_user(self, email, password=None):
         if not email:
             raise ValueError("Users must have an Emaill address")
-        if not username:
-            raise ValueError("Users must have an Username")
-        user = self.model(
-            email=self.normalize_email(email),
-            username=username,
-        )
 
+        user = self.model(email=self.normalize_email(email))
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, username, password):
+    def create_superuser(self, email, password):
         user = self.create_user(
             email=self.normalize_email(email),
-            password=password,
-            username=username,
+            password=password
         )
         user.is_admin = True
         user.is_staff = True
@@ -39,7 +31,7 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     """
       Custom user class inheriting AbstractBaseUser class
     """

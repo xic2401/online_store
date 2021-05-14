@@ -33,7 +33,7 @@ class Product(models.Model):
     price = models.DecimalField(verbose_name='Цена',
                                 max_digits=10,
                                 decimal_places=2)
-    category_id = models.ForeignKey(to=Category,
+    category = models.ForeignKey(to=Category,
                                     on_delete=models.SET_NULL,
                                     related_name='product_category',
                                     null=True)
@@ -48,10 +48,10 @@ class Product(models.Model):
 
 class Rating(models.Model):
     start = models.SmallIntegerField(verbose_name='Количество звёзд')
-    product_id = models.ForeignKey(to=Product,
+    product = models.ForeignKey(to=Product,
                                    on_delete=models.CASCADE,
                                    related_name='ratings')
-    user_id = models.ForeignKey(to=User,
+    user = models.ForeignKey(to=User,
                                 on_delete=models.SET_NULL,
                                 null=True,
                                 related_name='user_ratings')
@@ -65,10 +65,10 @@ class Rating(models.Model):
 
 class Comment(models.Model):
     text = models.TextField(verbose_name='Текст')
-    product_id = models.ForeignKey(to=Product,
+    product = models.ForeignKey(to=Product,
                                    on_delete=models.CASCADE,
                                    related_name='comments')
-    user_id = models.ForeignKey(to=User,
+    user = models.ForeignKey(to=User,
                                 on_delete=models.SET_NULL,
                                 null=True,
                                 related_name='user_comments')
